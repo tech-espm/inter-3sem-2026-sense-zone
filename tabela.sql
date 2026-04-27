@@ -1,3 +1,5 @@
+use sensezone;
+
 CREATE TABLE local (
     id_local INT PRIMARY KEY AUTO_INCREMENT,
     nome_local VARCHAR(100) NOT NULL,
@@ -20,7 +22,7 @@ CREATE TABLE leituras_sensor (
 -- (Consolidado i deve ser reiniciado para 0 na mudança de dia)
 select date_format(date(data_leitura), '%d/%m/%Y') dia, extract(hour from data_leitura) hora, sum(pessoas_entrando) total_entrada, sum(pessoas_saindo) total_saida
 from leituras_sensor
-where data_leitura between '2025-03-03 00:00:00' and '2025-03-14 23:59:59'
+where data_leitura between '2025-03-03 00:00:00' and '2025-03-14 23:59:59'  !@!@!@!@!@!@!@!@!@!@!@!@!!@!@!@!@!!@!@!@!@!@!@!@!@!@
 and id_local = 2
 group by dia, hora
 order by dia, hora;
