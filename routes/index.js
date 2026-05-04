@@ -9,14 +9,23 @@ const url_api = process.env.url_api;
 
 router.get("/", wrap(async (req, res) => {
 
-	const response = await axios.get(url_api + "?sensor=passage&data_inicial=2026-04-26&data_final=2026-04-28");
-	const dados = response.data;
-	console.log(dados);
+	
 
 	await sql.connect(async sql => {
-		const lista = await sql.query("select 1")
+		const lista = await sql.query("select max(id_local) id_local from leituras_sensor");
 
-		console.log(lista)
+		let id_inferior = 92107;
+		if(lista[0].id_local) {
+			id_inferior = lista[0].id_local;
+		}
+
+		const response = await axios.get(url_api + "?sensor=passage&id_inferior=" + id_inferior);
+		const dados = response.data;
+
+		for (let i = 0; i < dados.length; i++) {
+			const dadoNovo = dados[i];
+			await sql.query("insert into leituras_sensor (id_local, pessoas_entrando, pessoas_saindo, data_leitura) values (?, ?, ?, ?)", [dadoNovo.id, dadoNovo.entrada, dadoNovo.saida, dadoNovo.data]);
+		}
 	});
 
 	let nomeDoUsuarioQueVeioDoBanco = "Rafael";
