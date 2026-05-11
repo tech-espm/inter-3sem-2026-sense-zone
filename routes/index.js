@@ -12,11 +12,11 @@ router.get("/", wrap(async (req, res) => {
 	
 
 	await sql.connect(async sql => {
-		const lista = await sql.query("select max(id_local) id_local from leituras_sensor");
+		const lista = await sql.query("select max(id) id from leituras_sensor");
 
 		let id_inferior = 92107;
-		if(lista[0].id_local) {
-			id_inferior = lista[0].id_local;
+		if(lista[0].id) {
+			id_inferior = lista[0].id;
 		}
 
 		const response = await axios.get(url_api + "?sensor=passage&id_inferior=" + id_inferior);
@@ -24,7 +24,7 @@ router.get("/", wrap(async (req, res) => {
 
 		for (let i = 0; i < dados.length; i++) {
 			const dadoNovo = dados[i];
-			await sql.query("insert into leituras_sensor (id_local, pessoas_entrando, pessoas_saindo, data_leitura) values (?, ?, ?, ?)", [dadoNovo.id, dadoNovo.entrada, dadoNovo.saida, dadoNovo.data]);
+			await sql.query("insert into leituras_sensor (id, id_local, pessoas_entrando, pessoas_saindo, data_leitura) values (?, ?, ?, ?, ?)", [dadoNovo.id, dadoNovo.id_sensor, dadoNovo.entrada, dadoNovo.saida, dadoNovo.data]);
 		}
 	});
 
