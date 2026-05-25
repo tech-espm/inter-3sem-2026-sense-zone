@@ -38,6 +38,14 @@ router.get("/", wrap(async (req, res) => {
 	res.render("index/index", opcoes);
 }));
 
+router.get("/about", wrap(async (req, res) => {
+	res.render("index/about");
+}));
+
+router.get("/dash", wrap(async (req, res) => {
+	res.render("index/dash");
+}));
+
 router.get("/teste", wrap(async (req, res) => {
 	let opcoes = {
 		layout: "casca-teste"
