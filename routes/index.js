@@ -38,6 +38,21 @@ router.get("/", wrap(async (req, res) => {
 	res.render("index/index", opcoes);
 }));
 
+router.get("/dadosConsolidadosPorDiaHora", wrap(async (req, res) => {
+	await sql.connect(async sql => {
+		const dados = await sql.query(`
+			select date_format(date(data_leitura), '%d/%m/%Y') dia, extract(hour from data_leitura) hora, sum(pessoas_entrando) total_entrada, sum(pessoas_saindo) total_saida
+			from leituras_sensor
+			where data_leitura between ? and ?
+			and id_local = 2
+			group by dia, hora
+			order by dia, hora;
+		`, [req.query["data_inicial"] + " 00:00:00", req.query["data_final"] + " 23:59:59"]);
+
+		res.json(dados);
+	});
+}));
+
 router.get("/about", wrap(async (req, res) => {
 	res.render("index/about");
 }));
