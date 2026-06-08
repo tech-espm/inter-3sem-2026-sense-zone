@@ -34,15 +34,4 @@ and id_local = 2
 group by dia, hora
 order by dia, hora;
 
--- Query de consolidação de pessoas presentes por local no andar por dia do mês e por hora, para o heatmap de visão explodida por presença com N colunas e 24 linhas
--- A presença é dada por uma coluna virtual, gerada via código, onde:
--- presenca[i] = max(0, presenca[i - 1] + total_entrada[i] - total_saida[i])
--- exceto presenca[0], que vale 0
--- (Consolidado i deve ser reiniciado para 0 na mudança de dia)
-select date_format(date(s.data_leitura), '%d/%m/%Y') dia, extract(hour from s.data_leitura) hora, sum(s.pessoas_entrando) total_entrada, sum(s.pessoas_saindo) total_saida
-from leituras_sensor s
-inner join local l on l.id_local = s.id_local
-where s.data_leitura between '2026-05-01 00:00:00' and '2026-05-11 23:59:59'
-and l.andar_local = 1
-group by dia, hora
-order by dia, hora;
+
